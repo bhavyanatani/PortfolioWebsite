@@ -12,11 +12,6 @@ body {
     scroll-behavior: smooth;
 }
 
-html {
-    /* equal to your nav height */
-    scroll-behavior: smooth;
-}
-
 a {
     text-decoration: none;
     /* Removes the underline */
@@ -92,13 +87,30 @@ a:active {
     transform: scale(1.05);
 }
 
-#page1,
-#page2,
-#page3 {
+#page1 {
     height: 100vh;
     width: 100%;
     display: flex;
 }
+
+#page2,
+#page3 {
+    height: auto;
+    /* Let height adjust to content */
+    min-height: 100vh;
+    /* optional: at least full viewport */
+    display: flex;
+}
+
+#page2 {
+    margin-bottom: 60px;
+}
+
+#page3 {
+    margin-top: 60px;
+}
+
+
 
 #page4 {
     height: 100vh;
@@ -155,7 +167,7 @@ a:active {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 10%;
+    padding: clamp(20px, 5%, 80px);
 }
 
 #box1 h2 {
@@ -271,11 +283,15 @@ a:active {
 
 #box5 {
     width: 100%;
-    height: 75%;
+    min-height: 100vh;
+    /* <- use min-height instead of fixed height */
     background-color: #e0e7ff;
     padding-top: 120px;
-    /* <-- add this line */
+    padding-bottom: 60px;
+    /* <- add bottom padding */
+    box-sizing: border-box;
 }
+
 
 #box5 h1 {
     text-align: center;
@@ -540,12 +556,22 @@ a:active {
     padding-bottom: 1rem;
 }
 
-/* Responsive adjustments */
-
-/* Tablet View */
 @media (max-width: 1024px) {
-    #box1, #box2, #box3, #box4 {
-        padding: 40px;
+
+    /* HERO SECTION (page1): Stack text and image */
+    #page1 {
+        flex-direction: column;
+    }
+
+    #box1,
+    #box2 {
+        width: 100%;
+        height: auto;
+    }
+
+    #box2 {
+        order: -1;
+        /* Image on top for mobile */
     }
 
     #box1 h1 {
@@ -553,142 +579,211 @@ a:active {
     }
 
     #box1 h1 span {
-        font-size: 65px;
+        font-size: 60px;
     }
 
-    .section-heading {
-        font-size: 48px;
-    }
-
-    #box3 h1, #box5 h1 {
-        font-size: 50px;
+    #box1 h2 {
+        font-size: 28px;
     }
 }
 
-/* Mobile View */
 @media (max-width: 768px) {
-    #box {
+
+    #nav-links {
+        display: none;
+        /* hide nav links */
+        flex-direction: column;
+        width: 100%;
+        background-color: #1f2937;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        border-radius: 0 0 20px 20px;
+    }
+
+    #nav-links.active {
+        display: flex;
+        /* show nav links when active */
+    }
+
+    #hamburger {
+        display: block;
+        /* show hamburger icon */
+        font-size: 28px;
+        color: white;
+    }
+
+    #header {
+        position: relative;
+        /* so dropdown positions properly */
+    }
+
+    /* HEADER */
+    #header {
+        flex-direction: column;
+        padding: 10px;
+        width: 90%;
+    }
+
+    .texts {
+        padding: 8px 12px;
+        font-size: 18px;
+    }
+
+    /* BOX3 and BOX4 (about section) */
+    #page2 {
         flex-direction: column;
     }
 
-    #box1, #box2, #box3, #box4 {
+    #box3,
+    #box4 {
         width: 100%;
-        padding: 30px;
-        text-align: center;
-        align-items: center;
+        padding: 30px 20px;
     }
 
-    #box2 img {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
+    #box4 {
+        border-left: none;
+        border-top: 4px solid #1e3a8a;
+        margin-top: 20px;
+        align-items: flex-start;
+    }
+
+    #box4 {
+        min-height: auto;
+        padding: 40px 20px;
+        /* add some padding */
+        overflow: visible;
+    }
+
+    #box3 h1 {
+        font-size: 50px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    #box5 {
+        padding-top: 80px;
+        padding-bottom: 40px;
+        min-height: auto;
+    }
+
+    /* SKILLS SECTION (box5) */
+    #box5 h1 {
+        font-size: 36px;
+        margin-top: 0;
     }
 
     .skills-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(8px, 1fr));
+        gap: 16px;
+        max-width: 100%;
     }
 
-    .timeline::before {
-        left: 8px;
+    /* EDUCATION TIMELINE */
+    .timeline {
+        width: 100%;
     }
 
     .timeline-item {
-        width: 100%;
-        padding-left: 40px;
-        padding-right: 20px;
-        text-align: left;
+        width: 90%;
+        left: 0 !important;
+        text-align: left !important;
+        margin: 20px auto;
     }
 
-    .timeline-item.left,
-    .timeline-item.right {
-        left: 0;
+    .timeline::before {
+        left: 10px;
         transform: none;
     }
 
     .timeline-item.left::after,
     .timeline-item.right::after {
         left: 0;
+        right: auto;
+    }
+
+    /* PROJECTS + CONTACT (page4) */
+    #page4 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #projects-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+
+    .skill-item {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .project-card {
+        width: 90%;
+    }
+
+    #contact {
+        width: 95%;
+        margin: 20px auto;
     }
 }
 
-/* Small Phones */
 @media (max-width: 480px) {
     #box1 h1 {
         font-size: 36px;
     }
 
     #box1 h1 span {
-        font-size: 45px;
+        font-size: 42px;
     }
 
-    #cod {
-        font-size: 18px;
+    #box1 h2 {
+        font-size: 22px;
     }
 
-    .button-group {
-        flex-direction: column;
-        width: 100%;
-        gap: 10px;
-    }
-
-    .button-group a, #Resume {
-        width: 100%;
-        text-align: center;
-    }
-
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .project-card {
-        width: 100%;
+    #Resume,
+    #more-btn,
+    #contact-btn {
+        padding: 8px 16px;
+        font-size: 14px;
     }
 
     .section-heading {
-        font-size: 40px;
+        font-size: 36px;
     }
-}
 
-@media (max-width: 480px) {
-  #nav-links {
-    display: none; /* hide nav by default */
-    flex-direction: column;
-    background-color: #1f2937;
-    position: absolute;
-    top: 60px; /* adjust to header height */
-    right: 10px;
-    border-radius: 10px;
-    padding: 10px;
-    width: 150px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-    z-index: 1001;
-  }
+    .project-card h2 {
+        font-size: 20px;
+    }
 
-  #nav-links.show {
-    display: flex;
-  }
+    .project-card p {
+        font-size: 14px;
+    }
 
-  #hamburger {
-    display: block;
-    font-size: 28px;
-    cursor: pointer;
-    color: white;
-    user-select: none;
-  }
+    #contact h2 {
+        font-size: 24px;
+    }
 
-  /* Optional: nav link styles in dropdown */
-  #nav-links a {
-    padding: 10px;
-    color: white;
-    border-bottom: 1px solid #444;
-  }
+    #contact p {
+        font-size: 16px;
+    }
 
-  #nav-links a:last-child {
-    border-bottom: none;
-  }
+    .contact-links a {
+        font-size: 1rem;
+        margin: 0 10px;
+    }
 
-  #nav-links a:hover {
-    background-color: #facc15;
-    color: #1e3a8a;
-  }
+    #box4 h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .skill-item {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
 }
